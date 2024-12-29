@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Slot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Book a Parking Slot</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Slot ID</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in slots %}
+                    <tr>
+                        <td>{{ slot._id }}</td>
+                        <td>{{ slot.status }}</td>
+                        <td>
+                            {% if slot.status == 'free' %}
+                                <button onclick="bookSlot('{{ slot._id }}')">Book</button>
+                            {% else %}
+                                <button disabled>Occupied</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function bookSlot(slotId) {
+            const userId = '123';  // Example user ID, this should be dynamic
+            fetch('/book_slot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    slot_id: slotId,
+                    user_id: userId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Slot booked successfully!") {
+                    alert('Slot booked!');
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

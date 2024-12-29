@@ -1,0 +1,183 @@
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../images/bgcar.jpg");
+    background-size: cover; /* Ensures the image covers the entire background */
+    background-position: center; /* Centers the image */
+}
+
+.wrapper {
+    width: 410px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-left: 460px;
+}
+
+.wrapper .title {
+    font-size: 35px;
+    font-weight: 600;
+    text-align: center;
+    color: #fff;
+    user-select: none;
+    border-radius: 15px 15px 0 0;
+    background: linear-gradient(-135deg, #c850c0, #4158d0);
+    padding: 20px;
+}
+
+.wrapper form {
+    padding: 10px 30px 50px 30px;
+}
+
+.wrapper form .field {
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
+}
+
+.wrapper form .field input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    font-size: 17px;
+    padding-left: 20px;
+    border: 1px solid lightgrey;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.wrapper form .field input:focus,
+.wrapper form .field input:valid {
+    border-color: #4158d0;
+}
+
+.wrapper form .field label {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    color: #999999;
+    font-weight: 400;
+    font-size: 17px;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+}
+
+.wrapper form .field input:focus ~ label,
+.wrapper form .field input:valid ~ label {
+    top: -5px;
+    font-size: 14px;
+    color: #4158d0;
+    background: #fff;
+    transform: translateY(0);
+    padding-left: 5px;
+}
+
+.wrapper form .content {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    font-size: 16px;
+    align-items: center;
+    justify-content: space-around;
+    
+}
+
+.wrapper form .content .checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.wrapper form .content input {
+    width: 15px;
+    height: 15px;
+}
+
+.wrapper form .field input[type="submit"] {
+    color: #fff;
+    border: none;
+    margin-top: -10px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    background: linear-gradient(-135deg, #c850c0, #4158d0);
+    transition: all 0.3s ease;
+}
+
+.wrapper form .signup-link {
+    color: #262626;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.wrapper form .signup-link a {
+    color: #4158d0;
+    text-decoration: none;
+}
+
+</style>
+{% extends 'app.html' %}
+
+{% block content %}
+<div class="wrapper" style="background-image: url('/images/bgcar.jpg'); background-size: cover; background-position: center;">
+
+    <div class="title">
+        Login Form
+    </div>
+    <form action="{{ url_for('login') }}" method="POST">
+        {{ form.hidden_tag() }}
+
+        <!-- Email Field -->
+        <div class="field">
+            {{ form.email(class="form-control") }}
+            {{ form.email.label }}
+            {% if form.email.errors %}
+                <div class="text-danger">
+                    {% for error in form.email.errors %}
+                        <small>{{ error }}</small><br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Password Field -->
+        <div class="field">
+            {{ form.password(class="form-control") }}
+            {{ form.password.label }}
+            {% if form.password.errors %}
+                <div class="text-danger">
+                    {% for error in form.password.errors %}
+                        <small>{{ error }}</small><br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Submit Button -->
+        <div class="field">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+
+        <!-- Signup Link -->
+        <div class="signup-link">
+            Not a member? <a href="{{ url_for('register') }}">Signup now</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
