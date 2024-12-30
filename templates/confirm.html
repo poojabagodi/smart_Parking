@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+</head>
+<body>
+    <h1>Booking Confirmation</h1>
+    <p>Status: {{ booking_details.status }}</p>
+    <p>Message: {{ booking_details.message }}</p>
+    
+    <h2>Booking Details</h2>
+    <ul>
+        <li><strong>Spot Number:</strong> {{ booking_details.spot_number }}</li>
+        <li><strong>User ID:</strong> {{ booking_details.user_id }}</li>
+        <li><strong>License Plate:</strong> {{ booking_details.license_plate }}</li>
+        <li><strong>Phone:</strong> {{ booking_details.phone }}</li>
+        <li><strong>Cost:</strong> {{ booking_details.cost }}</li>
+    </ul>
+
+    <!-- You can add more details as needed -->
+
+    <a href="{{ url_for('pay', amount=10) }}">Proceed to Payment</a>
+</body>
+</html>

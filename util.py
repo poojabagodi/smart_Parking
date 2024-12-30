@@ -1,4 +1,6 @@
 import pickle
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module='sklearn')
 
 from skimage.transform import resize
 import numpy as np
@@ -43,8 +45,3 @@ def get_parking_spots_bboxes(connected_components):
         slots.append([x1, y1, w, h])
 
     return slots
-try:
-    MODEL = pickle.load(open("model.p", "rb"))
-except FileNotFoundError:
-    raise FileNotFoundError("The model file 'model.p' is missing.")
-

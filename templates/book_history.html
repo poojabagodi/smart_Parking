@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking History</title>
+</head>
+<body>
+    <h1>Your Booking History</h1>
+    {% if bookings %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Start Time</th>
+                    <th>Duration (hours)</th>
+                    <th>Status</th>
+                    <th>Slot ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.name }}</td>
+                        <td>{{ booking.phone }}</td>
+                        <td>{{ booking.start_time }}</td>
+                        <td>{{ booking.hours }}</td>
+                        <td>{{ booking.status }}</td>
+                        <td>{{ booking.slot_id }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No bookings found.</p>
+    {% endif %}
+</body>
+</html>

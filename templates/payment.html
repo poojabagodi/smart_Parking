@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #76c7c0, #f7f8f8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .payment-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #004643;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        #rzp-button1 {
+            background-color: #5cffab;
+            color: #004643;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #rzp-button1:hover {
+            background-color: #45e09b;
+            transform: scale(1.05);
+        }
+
+        #rzp-button1:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h1>Secure Payment</h1>
+        <p>Complete your transaction securely with Razorpay.</p>
+        <button id="rzp-button1">Pay with Razorpay</button>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        var options = {
+            "key": "rzp_live_K5vGF0enva3O8m", // Enter the Key ID generated from the Dashboard
+            "amount": "{{ pdata[0] }}", // Amount in currency subunits. Default is INR. 50000 refers to 50000 paise.
+            "currency": "INR",
+            "name": "Car Dedication",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": "{{ pdata[1] }}", // Order ID from backend response
+            "callback_url": "/success",
+            "prefill": {
+                "name": "Nithin",
+                "email": "msnithin83@gmail.com",
+                "contact": "6364362136"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#5cffab"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+        document.getElementById('rzp-button1').onclick = function (e) {
+            rzp1.open();
+            e.preventDefault();
+        };
+    </script>
+</body>
+</html>

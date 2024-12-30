@@ -27,7 +27,9 @@
             width: 100%;
             height: 100%;
         }
-
+        .navbar-brand{
+            font-size: 1.7rem;
+        }
         .content {
             position: relative;
             z-index: 2;
@@ -42,18 +44,24 @@
             text-align: center;
         }
 
+       
         html {
             scroll-behavior: smooth;
         }
 
+        /* Increased font size for Navbar elements */
         #navbarNav a {
-            opacity: 0.5;
+            opacity: 0.9;
+            font-size: 1.6rem; /* Increased font size */
+            font-weight: 600;
+            color: white; /* Make the text more visible */
         }
 
         #navbarNav a:hover {
             opacity: 1;
             border: 0.5px solid white;
             border-radius: 25px;
+            background-color: rgba(255, 255, 255, 0.2); /* Background on hover */
         }
 
         /* About Section Styling */
@@ -83,103 +91,182 @@
         }
 
         .about-section p {
-            font-size: 1.1em;
+            font-size: 1.4em;
             max-width: 800px;
             margin: 0 auto;
         }
 
-        /* Services Section Styling */
-        .services-section {
-            padding: 60px 0;
-            background-color: #f8f9fa;
-        }
-
-        .services-section h2 {
-            margin-bottom: 40px;
-            text-align: center;
-            font-size: 2em;
-            animation: fadeIn 1s forwards;
-        }
-
-        .service-card-container {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-        }
-
-        .service-card {
-            width: 300px;
-            margin-bottom: 30px;
-            background: #fff;
+        /* About Us Section Styling */
+        .about-section {
+            background-color: #f0f8ff; /* Light background for contrast */
+            padding: 50px;
             border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 1s forwards;
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .service-card img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        .service-card-description {
+            font-family: 'Arial', sans-serif;
+            color: #333; /* Neutral text color for readability */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto; /* Center the section */
             text-align: center;
         }
 
-        .service-card-text {
-            font-size: 1.1em;
-            margin-top: 15px;
-        }
-
-        /* Contact Section Styling */
-        .contact-section {
-            padding: 60px 0;
-            background-color: #333;
-            color: white;
-            text-align: center;
-        }
-
-        .contact-section h2 {
-            margin-bottom: 30px;
-            font-size: 2em;
-        }
-
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .contact-form .form-control {
+        .about-section h2 {
+            color: #00b4d8; /* Highlight color for the heading */
+            font-weight: bold;
+            text-transform: uppercase;
             margin-bottom: 20px;
-            border-radius: 5px;
+            border-bottom: 2px solid #00b4d8; /* Underline for the heading */
+            display: inline-block;
+            padding-bottom: 5px;
         }
 
-        .btn-submit {
-            display: block;
-            width: 100%;
-            background: #ff7e5f;
-            border: none;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 1.1em;
+        .about-section p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555; /* Slightly softer text color for contrast */
+            margin-top: 10px;
         }
 
-        .btn-submit:hover {
-            background: #feb47b;
-        }
+        /* Services Section Styling */
+.services-section {
+  background-color: #f9f9f9; /* Light background for contrast */
+  padding: 60px 20px;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+}
+h1{
+    font-size: 4rem;
+}
+
+.services-section h2 {
+  color: #00b4d8; /* Main highlight color */
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+
+/* Service Card Container */
+.service-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Individual Service Card */
+.service-card {
+  background-color: #ffffff; /* White card background */
+  border: 2px solid #00b4d8; /* Border with highlight color */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.service-card:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Service Card Image */
+.service-card img {
+  width: 100%;
+  height: auto;
+  border-bottom: 2px solid #00b4d8; /* Separator between image and content */
+}
+
+/* Service Card Description */
+.service-card-description {
+  padding: 20px;
+}
+
+.service-card-description h4 {
+  color: #00b4d8; /* Highlight color for headings */
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.service-card-text {
+  color: #555; /* Neutral text color for readability */
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .service-card-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .service-card {
+    max-width: 100%; /* Full width on smaller screens */
+  }
+}
+
+    /* Contact Section Styling */
+.contact-section {
+    padding: 60px 0;
+    background-color: #f0f8ff; /* Matching light blue background */
+    color: #333;
+    text-align: center;
+}
+
+.contact-section h2 {
+    margin-bottom: 30px;
+    font-size: 2em;
+    color: #00b4d8; /* Consistent with the About section heading */
+    border-bottom: 2px solid #00b4d8;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff; /* White background for contrast */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form .form-control {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.contact-form .form-control:focus {
+    border-color: #00b4d8;
+    box-shadow: 0 0 5px rgba(0, 180, 216, 0.5);
+    outline: none;
+}
+
+.btn-submit {
+    display: block;
+    width: 100%;
+    background-color: #00b4d8; /* Matching button color */
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #bcddef; /* Lighter background color on hover */
+    border-color: #ffffff; /* Slightly darker border for hover effect */
+    cursor: pointer; /* Pointer cursor on hover */
+    transform: scale(1.05); /* Slightly enlarge the button for a "clickable" feel */
+    color: #333333; /* Change text color to a darker shade for better contrast */
+}
 
         /* Scroll Effects */
         .service-card[data-appear="true"] {
@@ -214,67 +301,69 @@
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    
                 </ul>
             </div>
         </div>
     </nav>
+    
 
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="content text-center">
-            <h1>ParkVision</h1>
+            <h1 style="font-family: 'Times New Roman', Times, serif;">ParkVision</h1>
             <p>Guiding Every Spot, Every Time</p>
             <a href="{{ url_for('register') }}"><button type="button" class="btn btn-info">Register</button></a>
             <a href="{{ url_for('login') }}" class="btn btn-outline-light">Login</a>
         </div>
     </section>
-
     <!-- About Us Section -->
     <section id="about" class="about-section">
         <h2>About Us</h2>
-        <p>We are dedicated to bringing innovative parking solutions with cutting-edge technology, making parking smarter, safer, and more convenient for everyone.</p>
+        <p>At ParkVision, we are revolutionizing parking management with innovative, tech-driven solutions. Our mission is to create smarter, safer, and more efficient parking systems tailored for modern cities. Leveraging advanced technology, we aim to reduce congestion, enhance user convenience, and promote sustainability. From smart parking sensors to seamless payment integrations, our services ensure a hassle-free experience. We are dedicated to transforming parking spaces into smart hubs that benefit communities and the environment. Join us as we pave the way for a smarter, more connected future in urban mobility.</p>
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="services-section">
-        <h2>Our Services</h2>
-        <div class="service-card-container">
-            <div class="service-card" data-appear="false">
-                <img src="https://via.placeholder.com/400x250" alt="Smart Parking">
-                <div class="service-card-description">
-                    <h4>Smart Parking</h4>
-                    <p class="service-card-text">Real-time parking space availability with advanced sensors and smart monitoring.</p>
-                </div>
-            </div>
-            <div class="service-card" data-appear="false">
-                <img src="https://via.placeholder.com/400x250" alt="Guided Parking">
-                <div class="service-card-description">
-                    <h4>Guided Parking</h4>
-                    <p class="service-card-text">Intelligent navigation to the nearest available parking spot with our easy-to-use mobile app.</p>
-                </div>
-            </div>
-            <div class="service-card" data-appear="false">
-                <img src="https://via.placeholder.com/400x250" alt="Parking Analytics">
-                <div class="service-card-description">
-                    <h4>Parking Analytics</h4>
-                    <p class="service-card-text">Comprehensive data on parking trends to optimize the parking experience.</p>
-                </div>
+<section id="services" class="services-section">
+    <h2>Our Services</h2>
+    <div class="service-card-container">
+        <div class="service-card">
+            <img src="{{ url_for('static', filename='photos/smart.jpg') }}" alt="Smart Parking">
+            <div class="service-card-description">
+                <h4>Smart Parking</h4>
+                <p class="service-card-text">Real-time parking space availability with advanced sensors and smart monitoring.</p>
             </div>
         </div>
-    </section>
+        <div class="service-card">
+            <img src="{{ url_for('static', filename='photos/guided.jpg') }}" alt="Guided Parking">
+            <div class="service-card-description">
+                <h4>Guided Parking</h4>
+                <p class="service-card-text">Intelligent navigation to the nearest available parking spot with our easy-to-use mobile app.</p>
+            </div>
+        </div>
+        <div class="service-card">
+            <img src="{{ url_for('static', filename='photos/parkinganalytics.jpg') }}" alt="Parking Analytics">
+            <div class="service-card-description">
+                <h4>Parking Analytics</h4>
+                <p class="service-card-text">Comprehensive data on parking trends to optimize the parking experience.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section">
-        <h2>Contact Us</h2>
-        <div class="contact-form">
-            <form>
-                <input type="text" class="form-control" placeholder="Your Name" required>
-                <input type="email" class="form-control" placeholder="Your Email" required>
-                <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
-                <button type="submit" class="btn-submit">Send Message</button>
-            </form>
-        </div>
-    </section>
+   <!-- Contact Section -->
+<section id="contact" class="contact-section">
+    <h2>Contact Us</h2>
+    <div class="contact-form">
+        <form>
+            <input type="text" class="form-control" placeholder="Your Name" required>
+            <input type="email" class="form-control" placeholder="Your Email" required>
+            <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+    </div>
+</section>
+
 
     <script>
         // Animation trigger for services

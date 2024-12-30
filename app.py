@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, Email, ValidationError
 import bcrypt
 
 # Flask app setup
-app = Flask(_name_)
+app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 
 # Registration form setup using Flask-WTF
@@ -66,5 +66,5 @@ def logout():
     flash("Logged out successfully", "success")
     return redirect(url_for('index'))  # Redirect to home page
 
-if _name_ == '_main_':
+if __name__ == '_main_':
     app.run(debug=True)

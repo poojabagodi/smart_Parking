@@ -7,6 +7,10 @@ import bcrypt
 import cv2
 import numpy as np
 from util import get_parking_spots_bboxes, empty_or_not
+import random
+import razorpay
+import os
+import dotenv
 
 # ----------------------
 # App Initialization
@@ -18,6 +22,7 @@ app.secret_key = 'your_secret_key_here'
 app.config["MONGO_URI"] = "mongodb://localhost:27017/your_database_name"
 mongo = PyMongo(app)
 
+dotenv.load_dotenv()
 # ----------------------
 # Authentication Forms
 # ----------------------
@@ -40,8 +45,8 @@ class LoginForm(FlaskForm):
 # ----------------------
 # Parking Detection Config
 # ----------------------
-mask_path = r'D:\parkvision\parking-space-counter\mask_1920_1080.png'
-video_path = r'DD:\parkvision\parking-space-counter\parking_1920_1080.mp4'
+mask_path = r'D:\new_model_park\parking\mask_1920_1080.png'
+video_path = r'D:\new_model_park\parking\parking_1920_1080.mp4'
 
 mask = cv2.imread(mask_path, 0)
 cap = cv2.VideoCapture(video_path)
@@ -54,12 +59,16 @@ previous_frame = None
 frame_nmr = 0
 step = 30
 
+global free_spots
+
+
 # ----------------------
 # Video Frame Generator
 # ----------------------
 def calc_diff(im1, im2):
     return np.abs(np.mean(im1) - np.mean(im2))
 
+# Update the generate_frames function
 def generate_frames():
     global previous_frame, frame_nmr, spots_status
     while True:
@@ -67,6 +76,9 @@ def generate_frames():
         if not success:
             cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Restart video if end is reached
             continue
+
+        # Green frame logic inside here
+        green_frame = np.zeros_like(frame)  # Create a black frame of the same size as the original frame
 
         if frame_nmr % step == 0:
             if previous_frame is not None:
@@ -78,17 +90,29 @@ def generate_frames():
                 for spot_indx in range(len(spots)):
                     x1, y1, w, h = spots[spot_indx]
                     spot_crop = frame[y1:y1 + h, x1:x1 + w]
-                    spots_status[spot_indx] = empty_or_not(spot_crop)
+                    spot_status = empty_or_not(spot_crop)
+                    spots_status[spot_indx] = spot_status
+                    print(f"Spot {spot_indx}: {spot_status}")  # Debug print
 
         previous_frame = frame.copy()
 
         for spot_indx, (x1, y1, w, h) in enumerate(spots):
             spot_status = spots_status[spot_indx]
-            color = (0, 255, 0) if spot_status else (0, 0, 255)
+            color = (0, 255, 0) if spot_status else (0, 0, 255)  # Red for empty spots
             cv2.rectangle(frame, (x1, y1), (x1 + w, y1 + h), color, 2)
             cv2.putText(frame, str(spot_numbers[spot_indx]), (x1, y1 + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
 
-        available_spots = sum(1 for status in spots_status if status)
+            # For green frame, draw only empty spots
+            if not spot_status:  # If the spot is empty
+                cv2.rectangle(green_frame, (x1, y1), (x1 + w, y1 + h), (0, 0, 255), 2)  # Red for empty
+                cv2.putText(green_frame, str(spot_numbers[spot_indx]), (x1 + 5, y1 + 15),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+
+        # Show the green frame in a separate window
+        cv2.namedWindow('Empty Parking Spots', cv2.WINDOW_NORMAL)
+        cv2.imshow('Empty Parking Spots', green_frame)
+
+        available_spots = sum(1 for status in spots_status if not status)  # Count empty spots
         total_spots = len(spots_status)
         cv2.rectangle(frame, (80, 20), (550, 80), (0, 0, 0), -1)
         cv2.putText(frame, f'Available spots: {available_spots} / {total_spots}', (100, 60),
@@ -105,7 +129,20 @@ def generate_frames():
 # ----------------------
 @app.route('/')
 def home():
-    return redirect(url_for('register'))
+    if 'user_id' in session:
+        return render_template('first.html')
+    else:
+        return render_template('first.html')
+
+@app.route('/display')
+def display():
+    # Find free spots and their numbers
+
+    free_spots = [{"spot_number": spot_numbers[i], "bbox": spots[i]} for i, status in enumerate(spots_status) if status]
+    
+    return render_template('display.html', free_spots=free_spots)
+    # return {"free_spots": free_spots  , "total_spots": spots_status}
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -133,7 +170,6 @@ def login():
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
-
         user = mongo.db.users.find_one({"email": email})
 
         if user and bcrypt.checkpw(password.encode('utf-8'), user["password"]):
@@ -156,6 +192,10 @@ def dashboard():
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
+
+@app.route('/index')
+def index():
+    return render_template('index.html')
 
 @app.route('/video_feed')
 def video_feed():
@@ -197,12 +237,158 @@ def book():
     # Handle GET request (initial page load)
     return render_template('book.html', free_spaces=0)
 
-@app.route('/get_parking_data')
-def get_parking_data():
-    total_spots = len(spots_status)
-    available_spots = sum(1 for status in spots_status if status)
-    return jsonify(total_spots=total_spots, available_spots=available_spots)
+@app.route('/get_parking')
+def get_parking():
+    # Find the free spots and their numbers
+    free_spots = [{"spot_number": spot_numbers[i], "bbox": spots[i]} for i, status in enumerate(spots_status) if status]
+
+    # Print the data to check the result
+    print(f"Free spots: {free_spots}")
+
+    return jsonify({"free_spots": free_spots})
+
+# @app.route('/display', methods=['GET'])
+# def display_parking_spots():
+#     # Generate data for available spots dynamically
+#     free_spots = [{"spot_number": spot_numbers[i], "bbox": spots[i]} for i, status in enumerate(spots_status) if not status]
+    
+#     return render_template('display.html', free_spots=free_spots)
+#     # return jsonify({"free_spots": free_spots})
 
 # Main Execution
+
+global client
+client = razorpay.Client(auth=(os.getenv('id'), os.getenv('key')))
+@app.route('/pay' ,methods=[ "POST"])
+def pay():
+    amount = request.form['amount']
+    amount=int(amount)
+    amount *=100
+    if amount > 100:
+        
+        data = { "amount": amount, "currency": "INR", "receipt": "order_rcptid_11" }
+        payment = client.order.create(data=data)
+        pdata=[amount, payment["id"]]
+        mongo.db.users.update_one(
+            {'user_id': session['user_id']},
+        {'$set': session['book_details']}
+    )
+        return render_template("payment.html", pdata=pdata)
+    return redirect("/success")
+
+@app.route('/success', methods=["POST"])
+def success():
+    if request.method == "POST":
+
+        pid=request.form.get("razorpay_payment_id")
+        ordid=request.form.get("razorpay_order_id")
+        sign=request.form.get("razorpay_signature")
+        print(f"The payment id : {pid}, order id : {ordid} and signature : {sign}")
+        params={
+        'razorpay_order_id': ordid,
+        'razorpay_payment_id': pid,
+        'razorpay_signature': sign
+        }
+        final=client.utility.verify_payment_signature(params)
+        if final == True:
+            return redirect("/display", code=301)
+        return "Something Went Wrong Please Try Again"
+    return 'get in success'
+
+razorpay_client = razorpay.Client(auth=(os.getenv('id'), os.getenv('key')))
+
+@app.route('/payment', methods=['POST'])
+def payment2():
+    return render_template('payment2.html')
+
+@app.route('/book_history')
+def book_history():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Ensure the user is logged in
+
+    # Fetch booking history from MongoDB for the logged-in user
+    bookings_cursor = mongo.db.bookings.find({"email": session['user_id']})
+
+    # Print bookings for debugging
+    bookings = list(bookings_cursor)  # Convert the cursor to a list
+
+    print(f"Bookings found: {bookings}")
+
+    # Convert the bookings data to a list to pass to the template
+    booking_list = []
+    for booking in bookings:
+        booking_data = {
+            "name": booking["name"],
+            "phone": booking["phone"],
+            "start_time": booking["start_time"],
+            "hours": booking["hours"],
+            "status": booking["status"],
+            "slot_id": booking["slot_id"]
+        }
+        booking_list.append(booking_data)
+
+    return render_template('book_history.html', bookings=booking_list)
+
+# def payment(spot_number, user_id, cost):
+
+#     spot_number = int(spot_number)
+#     user_id = user_id
+
+#     # Check if the seat is still available
+#     # spot = next((s for s in free_spots if s['spot_number'] == spot_number), None)
+#     # if spot and spot.get('status') != 'paid':
+
+#         # Proceed to payment processing (simulate with a simple check)
+#         # make_payment(cost)  # Update parking lot status after successful payment
+#         # if random.choice([True, False]):
+#         #     # Update spot status after successful payment
+#         #     spot['status'] = False
+#         #     spot['user_id'] = user_id
+
+#         #     return jsonify({'status': True, 'message': 'Payment successful'})
+#         # else:
+#         #     return jsonify({'status': False, 'message': 'Payment failed'})
+#     else:
+#         return jsonify({'status':False, 'message': 'Seat is no longer available'})
+
+@app.route('/find_seat', methods=['POST'])
+def find_seat():
+    # return request.form
+    free_spots = [{"spot_number": spot_numbers[i], "bbox": spots[i]} for i, status in enumerate(spots_status) if status]
+
+    if not free_spots:
+        return jsonify({'status': 'error', 'message': 'No free spots available'})
+
+    # Simulate finding an empty seat
+    spot = random.choice(free_spots)
+    spot_number = spot['spot_number']
+
+    # Update the spot status to 'selected'
+    try:
+            
+        for s in free_spots:
+            if s['spot_number'] == spot_number:
+                s['status'] = 'selected'
+                break
+    except Exception as e:
+        return jsonify({'status': 'error', 'message fing free slot': str(e)})
+    
+    
+
+    session['book_details']={
+        'status': 'success',
+        'message': 'Seat found',
+        'spot_number': spot_number,
+        'user_id': session['user_id'],
+        'license_plate':request.form['license_plate'],
+        'phone':request.form['phone'],
+        'cost':f'Rs: {request.form["cost"]}/-' ,
+
+    }
+    # return redirect(url_for('pay', amount=10))
+    return render_template('details.html', slot =  s['spot_number']  )
+    
+
+
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)

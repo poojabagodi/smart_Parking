@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #76c7c0, #f7f8f8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Payment Container */
+        .payment-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .payment-container h1 {
+            font-size: 28px;
+            color: #004643;
+            margin-bottom: 10px;
+        }
+
+        .payment-container h1 span {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .payment-container h4 {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Form Styles */
+        .payment-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .payment-container input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .payment-container input[type="submit"] {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h1>Your Slot: <span>{{ slot }}</span></h1>
+        <form action="{{ url_for('pay')}}" method="post">
+            <input type="number" name="amount" value="10" placeholder="Enter Amount">
+            <input type="submit" value="Pay">
+        </form>
+        <div class="footer">
+            <p>Secure and easy payment processing</p>
+        </div>
+    </div>
+</body>
+</html>
