@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # parking-space-counter
 
 In this video I show you how to build a parking space detector and counter with computer vision !
@@ -7,3 +8,6 @@ In this video I show you how to build a parking space detector and counter with 
 ## data
 
 You can download the data and model I used in this tutorial [here](https://drive.google.com/drive/folders/1CjEFWihRqTLNUnYRwHXxGAVwSXF2k8QC?usp=sharing).
+=======
+# smart_Parking
+>>>>>>> 2ed7fdfd2bd9647a83253459e266cc3d3c3706d7
